@@ -3,7 +3,9 @@ package com.task4.demo.validators;
 public class BasicPasswordValidator implements PasswordValidator {
     private String toBeValidated;
 
-    public BasicPasswordValidator(String toBeValidated) {
+    public BasicPasswordValidator() {}
+
+    public void setPasswordToValidate(String toBeValidated) {
         this.toBeValidated = toBeValidated;
     }
 

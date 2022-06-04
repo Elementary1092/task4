@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -102,5 +103,12 @@ public class User {
         isOnline = online;
     }
 
-
+    public void fillIfRegDateIsNotSet() {
+        if (regDate != null) {
+            this.setId(UUID.randomUUID());
+            this.setRegDate(Date.valueOf(LocalDate.now()));
+            this.setLastSeen(Date.valueOf(LocalDate.now()));
+            this.setOnline(true);
+        }
+    }
 }

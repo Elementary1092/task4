@@ -1,5 +1,5 @@
 package com.task4.demo.user.signup;
 
 public interface SignUpStrategy {
-    void signUp();
+    void signUp() throws RuntimeException;
 }

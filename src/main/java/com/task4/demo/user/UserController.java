@@ -1,5 +1,6 @@
 package com.task4.demo.user;
 
+import com.task4.demo.exceptions.UserAlreadyExistsException;
 import com.task4.demo.repositories.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +47,7 @@ public class UserController {
     public void updateUser(@PathVariable(name="id") UUID userId) {
 
     }
+
+    @ExceptionHandler({UserAlreadyExistsException.class})
+    public void handleExistingUserException() {}
 }

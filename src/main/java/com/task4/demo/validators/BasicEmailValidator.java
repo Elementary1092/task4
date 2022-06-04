@@ -11,10 +11,7 @@ public class BasicEmailValidator implements EmailValidator {
 
     private String email;
 
-
-    public BasicEmailValidator(@NotNull String email) {
-        this.email = email.trim();
-    }
+    public BasicEmailValidator() {}
 
     public String getEmail() {
         return email;

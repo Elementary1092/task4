@@ -1,5 +1,6 @@
 package com.task4.demo.user;
 
+import com.task4.demo.exceptions.UserAlreadyExistsException;
 import com.task4.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,15 +35,12 @@ public class UserService {
         return repository.findByEmail(email);
     }
 
-    public User registerUser(User user) {
+    public User registerUser(User user) throws RuntimeException {
         if (repository.existsByEmail(user.getEmail())) {
-
+            throw new UserAlreadyExistsException(user.getEmail());
         }
 
-        user.setId(UUID.randomUUID());
-        user.setRegDate(Date.valueOf(LocalDate.now()));
-        user.setLastSeen(Date.valueOf(LocalDate.now()));
-        user.setOnline(true);
+        user.fillIfRegDateIsNotSet();
 
         return repository.save(user);
     }
