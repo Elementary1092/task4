@@ -1,4 +1,4 @@
-package com.task4.demo.signup;
+package com.task4.demo.user.signup;
 
 public class StandardSignUp implements SignUpStrategy {
     @Override

@@ -1,4 +1,4 @@
-package com.task4.demo.signup;
+package com.task4.demo.user.signup;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
