@@ -5,9 +5,10 @@
         <meta charset="UTF-8">
         <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
     </head>
+
     <body>
         <div>
-            <h1>USERS</h1>
+            <h1 th:align="center">USERS</h1>
         </div>
         <div>
             <table class="table table-striped table-bordered">
@@ -21,12 +22,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{{id}}</td>
-                        <td>{{email}}</td>
-                        <td>{{reg_date}}</td>
-                        <td>{{last_seen}}</td>
-                        <td>{{status}}</td>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}">--</td>
+                        <td th:text="${user.email}">--</td>
+                        <td th:text="${user.regDate}">--</td>
+                        <td th:text="${user.lastSeen}">--</td>
+                        <td th:text="${user.status}">offline</td>
                     </tr>
                 </tbody>
             </table>
@@ -36,11 +37,11 @@
     <footer class="bg-dark text-center text-white">
         <div class="container p-4">
             <section class="mb-4">
-                <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <a class="btn btn-outline-light btn-floating m-1" href="${github}" role="button">
                     <i class="fab fa-github"></i>
                 </a>
 
-                <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button">
+                <a class="btn btn-outline-light btn-floating m-1" href="${email}" role="button">
                     <i class="fab fa-gmail"></i>
                 </a>
             </section>
