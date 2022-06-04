@@ -1,5 +1,6 @@
 package com.task4.demo.validators;
 
+import com.task4.demo.exceptions.InvalidEmailException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
@@ -21,9 +22,9 @@ public class BasicEmailValidator implements EmailValidator {
         this.email = email;
     }
 
-    public void validate() {
+    public void validate() throws InvalidEmailException {
         if (!pattern.matcher(email).matches()) {
-
+            throw new InvalidEmailException(email);
         }
     }
 }
