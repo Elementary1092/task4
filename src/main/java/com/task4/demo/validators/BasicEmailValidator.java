@@ -6,9 +6,7 @@ import java.util.regex.Pattern;
 
 public class BasicEmailValidator implements EmailValidator {
     private final Pattern pattern = Pattern.compile(
-            "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-] + " +
-                    "+(?:\\\\.[a-zA-Z0-9_!#$%&’*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]" +
-                    "+(?:\\\\.[a-zA-Z0-9-]+)*$"
+            "^[a-zA-Z0-9_-]+(?:\\\\.[a-zA-Z0-9_!-]+)*@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$"
     );
 
     private String email;
