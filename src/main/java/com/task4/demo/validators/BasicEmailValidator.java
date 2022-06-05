@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class BasicEmailValidator implements EmailValidator {
     private final Pattern pattern = Pattern.compile(
-            "^[a-zA-Z0-9_-]+(?:\\\\.[a-zA-Z0-9_!-]+)*@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$"
+            "^(?=.{1,64}@)[\\p{L}0-9_-]+(\\.[\\p{L}0-9_-]+)*@[^-][\\p{L}0-9-]+(\\.[\\p{L}0-9-]+)*(\\.[\\p{L}]{2,})$"
     );
 
     private String email;
@@ -19,7 +19,7 @@ public class BasicEmailValidator implements EmailValidator {
     }
 
     public void setEmail(@NotNull String email) {
-        this.email = email;
+        this.email = email.trim();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class BasicEmailValidator implements EmailValidator {
 
     @Override
     public void validate(String email) throws InvalidEmailException {
-        if (!pattern.matcher(email).matches()) {
+        if (!pattern.matcher(email.trim()).matches()) {
             throw new InvalidEmailException(email);
         }
     }
