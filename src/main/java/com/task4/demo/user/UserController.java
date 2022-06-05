@@ -1,11 +1,13 @@
 package com.task4.demo.user;
 
+import com.task4.demo.common.DefaultFooterConfigurer;
 import com.task4.demo.exceptions.UserAlreadyExistsException;
 import com.task4.demo.repositories.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,7 +26,11 @@ public class UserController {
     }
 
     @GetMapping
-    public String getAllUsers() {
+    public String getAllUsers(Model model) {
+        model.addAttribute("title", "Users")
+                .addAttribute("users", service.getAllUsers());
+        new DefaultFooterConfigurer().populateFooter(model);
+
         return "users";
     }
 

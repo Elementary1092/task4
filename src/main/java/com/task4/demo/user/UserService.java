@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,8 +43,13 @@ public class UserService implements UserDetailsService {
         return repository.save(user);
     }
 
+    public List<User> getAllUsers() {
+        return repository.findAll();
+    }
+
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println();
         return repository.findByEmail(email);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -78,7 +79,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return new ArrayList<>();
     }
 
     public String getPassword() {
@@ -142,12 +143,25 @@ public class User implements UserDetails {
         return this;
     }
 
-    public void fillIfRegDateIsNotSet() {
-        if (regDate != null) {
-            this.setId(UUID.randomUUID());
-            this.setRegDate(Date.valueOf(LocalDate.now()));
-            this.setLastSeen(Date.valueOf(LocalDate.now()));
-            this.setOnline(true);
+    @PrePersist
+    public void fillIfIdIsNotSet() {
+        if (id == null) {
+            this.setId(UUID.randomUUID())
+                    .setRegDate(Date.valueOf(LocalDate.now()))
+                    .setLastSeen(Date.valueOf(LocalDate.now()))
+                    .setOnline(true);
         }
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("User{");
+        sb.append("id=").append(id);
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", regDate=").append(regDate);
+        sb.append(", lastSeen=").append(lastSeen);
+        sb.append(", isOnline=").append(isOnline);
+        sb.append('}');
+        return sb.toString();
     }
 }

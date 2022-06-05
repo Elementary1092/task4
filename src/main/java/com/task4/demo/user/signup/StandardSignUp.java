@@ -1,5 +1,7 @@
 package com.task4.demo.user.signup;
 
+import com.task4.demo.common.Encoder;
+import com.task4.demo.common.PasswordEncoder;
 import com.task4.demo.exceptions.InvalidPasswordException;
 import com.task4.demo.exceptions.UserAlreadyExistsException;
 import com.task4.demo.repositories.UserRepository;
@@ -17,19 +19,19 @@ public class StandardSignUp implements SignUpStrategy {
 
     private final EmailValidator emailValidator = new BasicEmailValidator();
 
-    public StandardSignUp() {}
+    private final Encoder encoder = new PasswordEncoder();
 
-    public StandardSignUp(SignUpEntity entity) {
-        this.entity = entity;
-    }
+    public StandardSignUp() {}
 
     @Override
     public Object signUp(UserRepository repository) throws RuntimeException {
         validateSignUpData(entity);
 
-        User user = new User().setEmail(entity.getUsername()).setPassword(entity.getPassword());
+        User user = new User()
+                .setEmail(entity.getUsername())
+                .setPassword(encoder.encode(entity.getPassword()));
 
-        doesUserExist(user, repository).fillIfRegDateIsNotSet();
+        doesUserExist(user, repository);
 
         return repository.save(user);
     }

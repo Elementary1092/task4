@@ -36,9 +36,11 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping(path = "/login")
+    @PostMapping(path = "/process_login")
     public void login(User user, HttpSession session) {
-        User userDetails = (User) service.login(user);
+        System.out.println(user.toString());
+
+        User userDetails = service.login(user);
 
         session.setAttribute("user_id", userDetails.getId());
 
