@@ -22,7 +22,15 @@ public class BasicEmailValidator implements EmailValidator {
         this.email = email;
     }
 
+    @Override
     public void validate() throws InvalidEmailException {
+        if (!pattern.matcher(email).matches()) {
+            throw new InvalidEmailException(email);
+        }
+    }
+
+    @Override
+    public void validate(String email) throws InvalidEmailException {
         if (!pattern.matcher(email).matches()) {
             throw new InvalidEmailException(email);
         }

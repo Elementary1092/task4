@@ -17,4 +17,11 @@ public class BasicPasswordValidator implements PasswordValidator {
             throw new InvalidPasswordException("expected length of password to be greater than 1");
         }
     }
+
+    @Override
+    public void validate(String toBeValidated) throws InvalidPasswordException {
+        if (toBeValidated.trim().length() == 0) {
+            throw new InvalidPasswordException("expected length of password to be greater than 1");
+        }
+    }
 }

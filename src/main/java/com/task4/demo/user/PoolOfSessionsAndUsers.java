@@ -25,5 +25,6 @@ public class PoolOfSessionsAndUsers {
 
     public void expireUserSession(UUID id, SessionRegistry sessionRegistry) {
         sessionRegistry.getSessionInformation(usersAndSessionIds.get(id)).expireNow();
+        usersAndSessionIds.remove(id);
     }
 }

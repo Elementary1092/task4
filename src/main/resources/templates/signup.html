@@ -4,18 +4,13 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-    <head>
-        <title>Sign up</title>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-    </head>
+    <head th:replace="fragments/header :: header"></head>
 
     <body>
         <div class="container text-center">
             <h1 th:align="center">SIGN UP</h1>
 
-            <form method="post" style="max-width: 600px; margin: 0 auto;">
+            <form th:object="${proxy}" method="post" style="max-width: 600px; margin: 0 auto;">
                 <div class="m-3">
                     <div class="form-group row">
                         <label class="col-4 col-form-label">E-mail: </label>
@@ -31,8 +26,17 @@
                                    required minlength="1"/>
                         </div>
                     </div>
+
                     <div class="form-group row">
-                        <button>Sign up</button>
+                        <label class="col-4 col-form-label">Confirm password: </label>
+                        <div class="col-8">
+                            <input type="password" class="form-control"
+                                   required minlength="1"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <button type="button" class="btn btn-default">Sign up</button>
                     </div>
                 </div>
             </form>

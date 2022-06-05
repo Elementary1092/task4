@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <body>
+        <div class="bg-dark text-center text-white" th:fragment="footer">
+            <div class="container p-4">
+                <section class="mb-4">
+                    <a class="btn btn-outline-light btn-floating m-1" href="${github}" role="button">
+                        <i class="fab fa-github"></i>
+                    </a>
+
+                    <a class="btn btn-outline-light btn-floating m-1" href="${email}" role="button">
+                        <i class="fab fa-gmail"></i>
+                    </a>
+                </section>
+            </div>
+
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2022 ITransition Internship Task 4
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,46 +1,47 @@
 package com.task4.demo.user.login;
 
 import com.task4.demo.user.PoolOfSessionsAndUsers;
+import com.task4.demo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.UUID;
 
 @Controller
 @RequestMapping
 public class LoginController {
-    private LoginStrategy loginStrategy;
+    private LoginService service;
 
     private PoolOfSessionsAndUsers usersAndSessions;
 
     @Autowired
-    public LoginController(PoolOfSessionsAndUsers usersAndSessions) {
+    public LoginController(PoolOfSessionsAndUsers usersAndSessions,
+                           LoginService service) {
         this.usersAndSessions = usersAndSessions;
+        this.service = service;
     }
 
     @GetMapping(path = "/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("title", "Log in")
+                .addAttribute("user", new User());
+
+        service.setLoginStrategy(new StandardLogin());
+
         return "login";
     }
 
     @PostMapping(path = "/login")
-    public void login(@RequestBody HashMap<String, String> parameters,
-                      HttpSession session) {
-        usersAndSessions.add(UUID.randomUUID(), session.getId());
-    }
+    public void login(User user, HttpSession session) {
+        User userDetails = (User) service.login(user);
 
-    public LoginStrategy getLoginStrategy() {
-        return loginStrategy;
-    }
+        session.setAttribute("user_id", userDetails.getId());
 
-    public void setLoginStrategy(LoginStrategy loginStrategy) {
-        this.loginStrategy = loginStrategy;
+        usersAndSessions.add(userDetails.getId(), session.getId());
     }
 }

@@ -1,5 +1,6 @@
 package com.task4.demo.common;
 
+import com.task4.demo.validators.BasicPasswordValidator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class PasswordEncoder implements Encoder {
@@ -24,18 +25,18 @@ public class PasswordEncoder implements Encoder {
     is the same as a desired encrypted string.
      */
     @Override
-    public boolean matches(String candidate, String realEncrypted) {
-        return encoder.matches(candidate, realEncrypted);
+    public boolean matches(String candidate, String realEncoded) {
+        return encoder.matches(candidate, realEncoded);
     }
 
     @Override
     public String encode(CharSequence rawPassword) {
-        return null;
+        return this.encode(rawPassword.toString());
     }
 
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
-        return false;
+        return this.matches(rawPassword.toString(), encodedPassword);
     }
 
     @Override

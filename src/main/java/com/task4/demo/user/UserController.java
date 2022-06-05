@@ -16,16 +16,16 @@ import java.util.function.Consumer;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final UserRepository repository;
+    private UserService service;
 
     @Autowired
-    public UserController(UserRepository repository) {
-        this.repository = repository;
+    public UserController(UserService service) {
+        this.service = service;
     }
 
     @GetMapping
-    public void getAllUsers() {
-
+    public String getAllUsers() {
+        return "users";
     }
 
     @PostMapping

@@ -3,15 +3,16 @@ package com.task4.demo.user;
 import com.task4.demo.exceptions.UserAlreadyExistsException;
 import com.task4.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository repository;
 
     @Autowired
@@ -35,19 +36,14 @@ public class UserService {
         return repository.findByEmail(email);
     }
 
-    public User registerUser(User user) throws RuntimeException {
-        if (repository.existsByEmail(user.getEmail())) {
-            throw new UserAlreadyExistsException(user.getEmail());
-        }
-
-        user.fillIfRegDateIsNotSet();
-
-        return repository.save(user);
-    }
-
     public User updateUser(User user) {
         repository.deleteById(user.getId());
 
         return repository.save(user);
+    }
+
+    @Override
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+        return repository.findByEmail(email);
     }
 }

@@ -1,6 +1,6 @@
 package com.task4.demo.security;
 
-
+import com.task4.demo.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,10 +11,12 @@ public class SecSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .logout()
+                .logoutUrl("/logout")
+                .and()
                 .formLogin()
-                .loginPage("/login.html")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/homepage.html", true)
+                .loginPage("/login.html")
                 .and()
                 .build();
     }
