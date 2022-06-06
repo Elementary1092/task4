@@ -9,19 +9,19 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class StandardLogin implements LoginStrategy {
-    private User user;
+    private UserLoginDetails user;
 
     private final Encoder encoder = new PasswordEncoder();
 
     @Override
-    public LoginStrategy setLoginEntity(@NotNull User user) throws RuntimeException {
+    public LoginStrategy setLoginEntity(@NotNull UserLoginDetails user) throws RuntimeException {
         this.user = user;
         return this;
     }
 
     @Override
     public UserDetails login(UserRepository repository) throws RuntimeException {
-        User userFromDb = repository.findByEmail(user.getEmail());
+        User userFromDb = repository.findByEmail(user.getUsername());
 
         if (!encoder.matches(user.getPassword(), userFromDb.getPassword())) {
             throw new InvalidPasswordException();

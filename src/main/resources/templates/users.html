@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:th="http://www.thymeleaf.org">
     <head th:replace="fragments/header :: header"></head>
 
     <body>
         <div>
             <h1 th:align="center">USERS</h1>
         </div>
+
+        <div th:replace="fragments/buttons :: logout"></div>
+
         <div>
             <table class="table table-striped table-bordered">
                 <thead class="thread-dark">
@@ -27,7 +28,7 @@
                         <td th:text="${user.email}">--</td>
                         <td th:text="${user.regDate}">--</td>
                         <td th:text="${user.lastSeen}">--</td>
-                        <td th:text="${user.status}">offline</td>
+                        <td th:text="${user.isOnline}">offline</td>
                     </tr>
                 </tbody>
             </table>

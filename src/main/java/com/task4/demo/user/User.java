@@ -98,17 +98,17 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return isOnline;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return isOnline;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return isOnline;
     }
 
     public User setPassword(String password) {
@@ -134,11 +134,11 @@ public class User implements UserDetails {
         return this;
     }
 
-    public boolean isOnline() {
+    public boolean getIsOnline() {
         return isOnline;
     }
 
-    public User setOnline(boolean online) {
+    public User setIsOnline(boolean online) {
         isOnline = online;
         return this;
     }
@@ -149,7 +149,7 @@ public class User implements UserDetails {
             this.setId(UUID.randomUUID())
                     .setRegDate(Date.valueOf(LocalDate.now()))
                     .setLastSeen(Date.valueOf(LocalDate.now()))
-                    .setOnline(true);
+                    .setIsOnline(true);
         }
     }
 

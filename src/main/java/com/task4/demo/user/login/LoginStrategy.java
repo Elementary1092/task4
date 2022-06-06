@@ -5,7 +5,7 @@ import com.task4.demo.user.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface LoginStrategy {
-    LoginStrategy setLoginEntity(User user) throws RuntimeException;
+    LoginStrategy setLoginEntity(UserLoginDetails user) throws RuntimeException;
 
     UserDetails login(UserRepository repository) throws RuntimeException;
 }

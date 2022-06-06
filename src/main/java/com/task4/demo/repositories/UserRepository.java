@@ -1,6 +1,7 @@
 package com.task4.demo.repositories;
 
 import com.task4.demo.user.User;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

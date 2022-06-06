@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <div th:fragment="cancelButton">
+            <div class="form-group row">
+                <button type="button" class="btn btn-default" th:onclick="'window.location.href=\'/users\''">
+                    Cancel
+                </button>
+            </div>
+        </div>
+
+        <div th:fragment="submitButton">
+            <div class="form-group row">
+                <button type="submit" class="btn btn-default" formmethod="post" autofocus>
+                    Submit
+                </button>
+            </div>
+        </div>
+
+        <div th:fragment="logout">
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Sign Out"/>
+            </form>
+        </div>
+    </body>
+</html>

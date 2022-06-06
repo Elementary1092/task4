@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:th="http://www.thymeleaf.org">
     <head th:replace="fragments/header :: header"></head>
 
     <body>
-        <div class="container text-center">
+        <div class="flex-lg-wrap text-center">
             <h1 th:align="center">SIGN UP</h1>
 
             <form th:object="${proxy}" th:action="@{/signup}" method="post" style="max-width: 600px; margin: 0 auto;">

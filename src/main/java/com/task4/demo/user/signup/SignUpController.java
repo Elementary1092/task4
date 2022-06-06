@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/signup")
 public class SignUpController {
     private SignUpService service;
 
@@ -17,7 +16,7 @@ public class SignUpController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping("/signup.html")
     public String signUpPage(Model model) {
         model.addAttribute("title", "Sign up")
                 .addAttribute("proxy", new StandardSignUpEntity());
@@ -27,7 +26,7 @@ public class SignUpController {
         return "signup";
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     public void signUp(StandardSignUpEntity entity) {
         service.registerUser(entity);
     }

@@ -1,6 +1,8 @@
 package com.task4.demo.exceptions;
 
-public class InvalidPasswordException extends RuntimeException
+import org.springframework.security.core.AuthenticationException;
+
+public class InvalidPasswordException extends AuthenticationException
         implements InvalidLoginParametersException {
     public InvalidPasswordException() {
         super("invalid password");

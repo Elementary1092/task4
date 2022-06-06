@@ -3,6 +3,7 @@ package com.task4.demo.user;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -15,7 +16,7 @@ public class PoolOfSessionsAndUsers {
         this.usersAndSessionIds = new HashMap<>();
     }
 
-    public void add(UUID id, String sessionId) {
+    synchronized public void add(UUID id, String sessionId) {
         usersAndSessionIds.put(id, sessionId);
     }
 
@@ -23,8 +24,8 @@ public class PoolOfSessionsAndUsers {
         return usersAndSessionIds.containsKey(id);
     }
 
-    public void expireUserSession(UUID id, SessionRegistry sessionRegistry) {
-        sessionRegistry.getSessionInformation(usersAndSessionIds.get(id)).expireNow();
+    synchronized public void expireUserSession(UUID id, HttpSession session) {
+        session.invalidate();
         usersAndSessionIds.remove(id);
     }
 }
