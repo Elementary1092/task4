@@ -20,21 +20,27 @@
         </div>
 
         <div th:fragment="logout">
-            <form th:action="@{/logout}" method="post">
-                <input type="submit" value="logout"/>
-            </form>
+            <button type="button" value="logout" th:onclick="'window.location.href=\'/logout\''">
+                Log out
+            </button>
         </div>
 
         <div th:fragment="block">
-            <input th:name="button" type="submit" th:value="block"/>
+            <button name="button" type="submit" value="block">
+                Block
+            </button>
         </div>
 
         <div th:fragment="unblock">
-            <input th:name="button" type="submit" th:value="unblock"/>
+            <button name="button" type="submit" value="unblock">
+                Unblock
+            </button>
         </div>
 
         <div th:fragment="delete">
-            <input th:name="button" type="submit" th:value="delete"/>
+            <button name="button" type="submit" value="delete">
+                Delete
+            </button>
         </div>
     </body>
 </html>

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +68,9 @@ public class UserController {
     }
 
     @RequestMapping(path = "/logout")
-    public void logout(final HttpSession session) {
+    public void logout(final HttpSession session,
+                       final HttpServletResponse response) throws IOException {
         service.logout((UUID) session.getAttribute("user_id"), session);
+        response.sendRedirect("/login");
     }
 }

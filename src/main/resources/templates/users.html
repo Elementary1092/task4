@@ -38,7 +38,7 @@
                     </thead>
                     <tbody>
                         <tr th:each="user : ${users}">
-                            <td><input type="checkbox" th: name="checked"></td>
+                            <td><input type="checkbox" name="checked"></td>
                             <td th:text="${user.id}">--</td>
                             <td th:text="${user.email}">--</td>
                             <td th:text="${user.regDate}">--</td>
