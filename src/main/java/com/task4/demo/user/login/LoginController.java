@@ -3,6 +3,7 @@ package com.task4.demo.user.login;
 import com.task4.demo.user.PoolOfSessionsAndUsers;
 import com.task4.demo.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.stereotype.Controller;
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 @Controller
@@ -37,8 +35,9 @@ public class LoginController {
     }
 
     @RequestMapping(path = "/")
-    public void login(final HttpServletResponse response) throws IOException {
-        response.sendRedirect("/login");
+    public void homePage(final HttpServletRequest request,
+                         final HttpServletResponse response) throws IOException {
+        redirectStrategy.sendRedirect(request, response, "/login");
     }
 
     @GetMapping(path = "/login")
@@ -56,25 +55,18 @@ public class LoginController {
                       final HttpServletRequest request,
                       final HttpServletResponse response) throws IOException {
         try {
-            User userDetails = service.login(user);
-            user.setAuthorized();
-            setSessionInformation(userDetails, session, request, response);
+            service.login(user, session);
+            setSessionInformation(request, response);
         }
         catch (RuntimeException e) {
-            System.out.println("error");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
             redirectStrategy.sendRedirect(request, response, "/login");
             return;
         }
     }
 
-    private void setSessionInformation(final User user,
-                                       final HttpSession session,
-                                       final HttpServletRequest request,
+    private void setSessionInformation(final HttpServletRequest request,
                                        final HttpServletResponse response) throws IOException {
-        session.setAttribute("user_id", user.getId());
         response.setStatus(HttpServletResponse.SC_ACCEPTED);
-        usersAndSessions.add(user.getId(), session.getId());
-        response.sendRedirect("/users");
+        redirectStrategy.sendRedirect(request, response, "/users");
     }
 }

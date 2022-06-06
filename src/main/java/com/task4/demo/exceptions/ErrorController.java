@@ -1,28 +1,50 @@
 package com.task4.demo.exceptions;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 
-@ControllerAdvice
+@Controller
 @RequestMapping(path = "/error")
 public class ErrorController {
-    @GetMapping
-    @PostMapping
-    @PutMapping
-    @DeleteMapping
-    @PatchMapping
-    public String displayError(HttpStatus status, WebRequest request) {
-        Map<String, Object> model = new HashMap<>();
-        model.put("error_code", (status==null)?500:status.value());
-        model.put("request", request.getContextPath());
+    @RequestMapping(value = "errors", method = RequestMethod.GET)
+    public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 
-        return "error";
+        ModelAndView errorPage = new ModelAndView("error");
+        StringBuffer errorMsg = new StringBuffer().append("HTTP Error Code: ");
+        int httpErrorCode = getErrorCode(httpRequest);
+
+        switch (httpErrorCode) {
+            case 400: {
+                errorMsg.append("400. Bad Request");
+                break;
+            }
+            case 401: {
+                errorMsg.append("401. Unauthorized");
+                break;
+            }
+            case 404: {
+                errorMsg.append("404. Resource not found");
+                break;
+            }
+            case 500: {
+                errorMsg.append("500. Internal Server Error");
+                break;
+            }
+            default: {
+                errorMsg.append(httpErrorCode + ". Unknown error");
+            }
+        }
+
+        errorPage.addObject("error", errorMsg.toString());
+
+        return errorPage;
+    }
+
+    private int getErrorCode(HttpServletRequest httpRequest) {
+        return (Integer) httpRequest
+                .getAttribute("javax.servlet.error.status_code");
     }
 }

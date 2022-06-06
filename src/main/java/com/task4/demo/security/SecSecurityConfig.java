@@ -42,14 +42,6 @@ public class SecSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeRequests()
-                .antMatchers("/login", "signup").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .and()
                 .httpBasic().disable().build();
     }
 }

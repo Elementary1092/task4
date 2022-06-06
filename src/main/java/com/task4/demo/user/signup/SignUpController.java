@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @Controller
 public class SignUpController {
     private SignUpService service;
@@ -16,7 +19,7 @@ public class SignUpController {
         this.service = service;
     }
 
-    @GetMapping("/signup.html")
+    @GetMapping("/signup")
     public String signUpPage(Model model) {
         model.addAttribute("title", "Sign up")
                 .addAttribute("proxy", new StandardSignUpEntity());
@@ -27,7 +30,9 @@ public class SignUpController {
     }
 
     @PostMapping("/signup")
-    public void signUp(StandardSignUpEntity entity) {
+    public void signUp(StandardSignUpEntity entity,
+                       final HttpServletResponse response) throws IOException {
         service.registerUser(entity);
+        response.sendRedirect("/login");
     }
 }

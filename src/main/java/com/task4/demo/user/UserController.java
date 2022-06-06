@@ -1,13 +1,16 @@
 package com.task4.demo.user;
 
 import com.task4.demo.common.DefaultFooterConfigurer;
-import com.task4.demo.exceptions.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,56 +18,56 @@ import java.util.UUID;
 public class UserController {
     private UserService service;
 
-    private PoolOfSessionsAndUsers usersAndSessions;
-
     @Autowired
-    public UserController(UserService service, PoolOfSessionsAndUsers usersAndSessions) {
+    public UserController(UserService service) {
         this.service = service;
-        this.usersAndSessions = usersAndSessions;
     }
 
     @GetMapping("/users")
     public String getAllUsers(Model model) {
         model.addAttribute("title", "Users")
-                .addAttribute("users", setUsersOnlineParameter(service.getAllUsers()));
+                .addAttribute("users", service.getAllUsers())
+                .addAttribute("checkedUser", new ArrayList<User>());
         new DefaultFooterConfigurer().populateFooter(model);
 
         return "users";
     }
 
     @PostMapping("/users")
-    public void removeCheckedUsers() {
+    public void changeUsersList(
+            @RequestParam(value = "users") List<User> users,
+            final HttpServletRequest request,
+            final SessionRegistry sessions
+    ) throws IOException {
+        String field = request.getParameter("button");
 
-    }
-
-    @GetMapping(path = "users/{id}")
-    public String getUserPage(@PathVariable(name="id") UUID userId, Model model) {
-        model.addAttribute("title", "User");
-        model.addAttribute("user", service.findUserById(userId));
-
-        return "user";
-    }
-
-    @PatchMapping(path = "users/{id}")
-    public void updateUser(@PathVariable(name="id") UUID userId, User user) {
-        service.updateUser(user);
-    }
-
-    @DeleteMapping(path = "/logout")
-    public void logout(final HttpSession session) {
-        usersAndSessions.expireUserSession((UUID) session.getAttribute("user_id"), session);
-    }
-
-    @ExceptionHandler({UserAlreadyExistsException.class})
-    public void handleExistingUserException() {}
-
-    private List<User> setUsersOnlineParameter(List<User> users) {
-        for (User user : users) {
-            if (usersAndSessions.existsUserSession(user.getId())) {
-                user.setIsOnline(true);
-            }
+        if (field.equals("block")) {
+            blockCheckedUsers(users, sessions);
+        } else if (field.equals("unblock")) {
+            unblockCheckedUsers(users);
+        } else if (field.equals("delete")) {
+            deleteUsers(users, sessions);
+        } else {
+            new IOException("Not found");
         }
+    }
 
-        return users;
+    public void blockCheckedUsers(List<User> users,
+                                  final SessionRegistry sessions) {
+        service.blockUsers(users, sessions);
+    }
+
+    public void unblockCheckedUsers(List<User> users) {
+        service.unblockUsers(users);
+    }
+
+    public void deleteUsers(List<User> users,
+                            final SessionRegistry sessions) throws IOException {
+        service.deleteUsers(users, sessions);
+    }
+
+    @RequestMapping(path = "/logout")
+    public void logout(final HttpSession session) {
+        service.logout((UUID) session.getAttribute("user_id"), session);
     }
 }

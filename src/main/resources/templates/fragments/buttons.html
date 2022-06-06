@@ -21,8 +21,20 @@
 
         <div th:fragment="logout">
             <form th:action="@{/logout}" method="post">
-                <input type="submit" value="Sign Out"/>
+                <input type="submit" value="logout"/>
             </form>
+        </div>
+
+        <div th:fragment="block">
+            <input th:name="button" type="submit" th:value="block"/>
+        </div>
+
+        <div th:fragment="unblock">
+            <input th:name="button" type="submit" th:value="unblock"/>
+        </div>
+
+        <div th:fragment="delete">
+            <input th:name="button" type="submit" th:value="delete"/>
         </div>
     </body>
 </html>

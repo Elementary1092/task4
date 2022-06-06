@@ -28,4 +28,13 @@ public class PoolOfSessionsAndUsers {
         session.invalidate();
         usersAndSessionIds.remove(id);
     }
+
+    synchronized public void expireUserSession(UUID id, SessionRegistry sessionRegistry) {
+        try {
+            sessionRegistry.getSessionInformation(usersAndSessionIds.get(id)).expireNow();
+        }
+        catch (NullPointerException e) {
+            return;
+        }
+    }
 }

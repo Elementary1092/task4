@@ -32,6 +32,12 @@ public class User implements UserDetails {
     @Transient
     private boolean isOnline;
 
+    @Transient
+    private boolean checked;
+
+    @Column(nullable = false)
+    private boolean blocked;
+
     public User() {}
 
     public User(String email) {
@@ -141,6 +147,23 @@ public class User implements UserDetails {
     public User setIsOnline(boolean online) {
         isOnline = online;
         return this;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public User setBlocked(boolean blocked) {
+        this.blocked = blocked;
+        return this;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     @PrePersist
