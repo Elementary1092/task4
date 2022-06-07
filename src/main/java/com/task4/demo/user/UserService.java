@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,7 @@ public class UserService {
 
     public void deleteById(UUID id) {
         repository.deleteById(id);
-        users.expireUserSession(id);
+        users.expireUser(id);
     }
 
     public void deleteUsers(List<UUID> userIds) {
@@ -49,7 +48,7 @@ public class UserService {
         if (mayBeUser.isPresent()) {
             User user = mayBeUser.get().setBlocked(true);
             repository.save(user);
-            users.expireUserSession(user.getId());
+            users.expireUser(user.getId());
         }
     }
 
@@ -74,23 +73,12 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return setUsersOnlineParameter(repository.findAll());
+        return repository.findAll();
     }
 
-    public void logout(final HttpServletRequest request,
-                       final HttpServletResponse response) {
+    public void logout(final HttpServletRequest request) {
         UUID userId = (UUID) request.getSession().getAttribute("user_id");
-        users.expireUserSession(userId);
+        users.expireUser(userId);
         request.getSession().invalidate();
-    }
-
-    private List<User> setUsersOnlineParameter(List<User> users) {
-        for (User user : users) {
-            if (this.users.existsUserSession(user.getId())) {
-                user.setIsOnline(true);
-            }
-        }
-
-        return users;
     }
 }

@@ -30,12 +30,6 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Date lastSeen;
 
-    @Transient
-    private boolean isOnline;
-
-    @Transient
-    private boolean checked;
-
     @Column(nullable = false)
     private boolean blocked;
 
@@ -53,7 +47,6 @@ public class User implements UserDetails {
         this.email = email;
         this.regDate = regDate;
         this.lastSeen = lastSeen;
-        this.isOnline = false;
     }
 
     public User(UUID id, String email, String password,
@@ -63,7 +56,6 @@ public class User implements UserDetails {
         this.password = password;
         this.regDate = regDate;
         this.lastSeen = lastSeen;
-        this.isOnline = isOnline;
     }
 
     public UUID getId() {
@@ -105,17 +97,17 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return isOnline;
+        return blocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isOnline;
+        return false;
     }
 
     @Override
     public boolean isEnabled() {
-        return isOnline;
+        return false;
     }
 
     public User setPassword(String password) {
@@ -140,16 +132,6 @@ public class User implements UserDetails {
         this.lastSeen = lastSeen;
         return this;
     }
-
-    public boolean getIsOnline() {
-        return isOnline;
-    }
-
-    public User setIsOnline(boolean online) {
-        isOnline = online;
-        return this;
-    }
-
     public boolean isBlocked() {
         return blocked;
     }
@@ -159,21 +141,13 @@ public class User implements UserDetails {
         return this;
     }
 
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
     @PrePersist
     public void fillIfIdIsNotSet() {
         if (id == null) {
             this.setId(UUID.randomUUID())
                     .setRegDate(Date.valueOf(LocalDate.now()))
                     .setLastSeen(Date.valueOf(LocalDate.now()))
-                    .setIsOnline(true);
+                    .setBlocked(false);
         }
     }
 
@@ -184,7 +158,7 @@ public class User implements UserDetails {
         sb.append(", email='").append(email).append('\'');
         sb.append(", regDate=").append(regDate);
         sb.append(", lastSeen=").append(lastSeen);
-        sb.append(", isOnline=").append(isOnline);
+        sb.append(", isBlocked=").append(blocked);
         sb.append('}');
         return sb.toString();
     }

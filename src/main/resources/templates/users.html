@@ -12,16 +12,16 @@
         <div>
 
             <div th:replace="fragments/buttons :: logout"></div>
-            <table class="table table-striped table-bordered" id="table">
-                <thead class="thread-dark">
+            <table class="table table-striped table-bordered table-hover"
+                   style="align-content: center; align-self: center" id="table">
+                <thead class="thead-dark">
                     <tr>
-                        <th>ID</th>
-                        <th>Email</th>
-                        <th>Register date</th>
-                        <th>Last seen</th>
-                        <th>Status</th>
-                        <th>Blocked</th>
-                        <th>Actions</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Register date</th>
+                        <th scope="col">Last seen</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,17 +30,22 @@
                         <td th:text="${user.email}">--</td>
                         <td th:text="${user.regDate}">--</td>
                         <td th:text="${user.lastSeen}">--</td>
-                        <td th:text="${user.isOnline} ? 'online' : 'offline'">--</td>
-                        <td th:text="${user.blocked} ? 'Yes' : 'No'">--</td>
+                        <td th:text="${user.blocked} ? 'Blocked' : 'Active'">--</td>
                         <td>
                             <form method="POST" th:action="@{/users/block/{id}(id=${user.id})}">
-                                <button type="submit" name="submit" value="value" class="link-button">Block</button>
+                                <button type="submit" name="submit" value="value" class="btn btn-primary">
+                                    <i class="fa fa-lock"></i>
+                                </button>
                             </form>
                             <form method="POST" th:action="@{/users/unblock/{id}(id=${user.id})}">
-                                <button type="submit" name="submit" value="value" class="link-button">Unblock</button>
+                                <button type="submit" name="submit" value="value" class="btn btn-primary">
+                                    <i class="fa fa-unlock"></i>
+                                </button>
                             </form>
                             <form method="POST" th:action="@{/users/delete/{id}(id=${user.id})}">
-                                <button type="submit" name="submit" value="value" class="link-button">Delete</button>
+                                <button type="submit" name="submit" value="value" class="btn btn-primary">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>

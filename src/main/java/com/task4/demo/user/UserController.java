@@ -67,7 +67,7 @@ public class UserController {
     @RequestMapping(path = "/logout")
     public void logout(final HttpServletRequest request,
                        final HttpServletResponse response) throws IOException {
-        service.logout(request, response);
+        service.logout(request);
         response.sendRedirect("/login");
     }
 }

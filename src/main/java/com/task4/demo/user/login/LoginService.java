@@ -32,7 +32,6 @@ public class LoginService {
     public User login(UserLoginDetails user,
                       final HttpServletRequest request) throws RuntimeException {
         User userDetails = loginStrategy.setLoginEntity(user).login(repository);
-        userDetails.setIsOnline(true);
         if (!userDetails.isBlocked()) {
             request.getSession().setAttribute("user_id", userDetails.getId());
             users.add(userDetails.getId());

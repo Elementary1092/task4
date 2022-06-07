@@ -1,6 +1,5 @@
 package com.task4.demo.user;
 
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
@@ -24,11 +23,11 @@ public class PoolOfUsers {
         return usersAndContexts.containsKey(id);
     }
 
-    synchronized public void expireUserSession(UUID id) {
+    synchronized public void expireUser(UUID id) {
         usersAndContexts.remove(id);
     }
 
-    synchronized public void expireUserSession(UUID id, HttpSession session) {
+    synchronized public void expireUser(UUID id, HttpSession session) {
         session.invalidate();
         usersAndContexts.remove(id);
     }
