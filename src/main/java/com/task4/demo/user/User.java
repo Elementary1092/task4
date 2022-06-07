@@ -15,6 +15,7 @@ import java.util.UUID;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Column(nullable = false, unique = true, length = 50)

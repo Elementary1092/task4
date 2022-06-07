@@ -3,67 +3,73 @@ package com.task4.demo.user;
 import com.task4.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 @Service
 @DependsOnDatabaseInitialization
 public class UserService {
     private final UserRepository repository;
 
-    private PoolOfSessionsAndUsers usersAndSessions;
+    private PoolOfUsers users;
 
     @Autowired
     public UserService(UserRepository repository,
-                       PoolOfSessionsAndUsers usersAndSessions) {
+                       PoolOfUsers users) {
         this.repository = repository;
-        this.usersAndSessions = usersAndSessions;
+        this.users = users;
+    }
+
+    public boolean userExists(final HttpServletRequest request) {
+        UUID userId = (UUID) request.getSession().getAttribute("user_id");
+
+        return users.existsUserSession(userId);
     }
 
     public void deleteById(UUID id) {
         repository.deleteById(id);
+        users.expireUserSession(id);
     }
 
-    public void deleteUsers(List<User> users, final SessionRegistry sessions) {
-        users.stream().filter(user -> user.isChecked()).toList();
-        for (User user : users) {
-            deleteById(user.getId());
-            usersAndSessions.expireUserSession(user.getId(), sessions);
+    public void deleteUsers(List<UUID> userIds) {
+        for (UUID userId : userIds) {
+            deleteById(userId);
         }
     }
 
-    public void blockById(User user) {
-        user.setBlocked(true);
-        repository.save(user);
-    }
-
-    public void blockUsers(List<User> users, SessionRegistry sessions) {
-        users.stream().filter(user -> user.isChecked()).toList();
-        for (User user : users) {
-            blockById(user);
-            usersAndSessions.expireUserSession(user.getId(), sessions);
+    public void blockById(UUID id) {
+        Optional<User> mayBeUser = repository.findById(id);
+        if (mayBeUser.isPresent()) {
+            User user = mayBeUser.get().setBlocked(true);
+            repository.save(user);
+            users.expireUserSession(user.getId());
         }
     }
 
-    public void unblock(User user) {
-        user.setBlocked(false);
-        repository.save(user);
+    public void blockUsers(List<UUID> userIds) {
+        for (UUID userId : userIds) {
+            blockById(userId);
+        }
     }
 
-    public void unblockUsers(List<User> users) {
-        users.stream().filter(user -> user.isChecked()).toList();
-        for (User user : users) {
-            unblock(user);
+    public void unblockById(UUID id) {
+        Optional<User> mayBeUser = repository.findById(id);
+        if (mayBeUser.isPresent()) {
+            User user = mayBeUser.get().setBlocked(false);
+            repository.save(user);
+        }
+    }
+
+    public void unblockUsers(List<UUID> userIds) {
+        for (UUID userId : userIds) {
+            unblockById(userId);
         }
     }
 
@@ -71,13 +77,16 @@ public class UserService {
         return setUsersOnlineParameter(repository.findAll());
     }
 
-    public void logout(UUID userId, HttpSession session) {
-        usersAndSessions.expireUserSession(userId, session);
+    public void logout(final HttpServletRequest request,
+                       final HttpServletResponse response) {
+        UUID userId = (UUID) request.getSession().getAttribute("user_id");
+        users.expireUserSession(userId);
+        request.getSession().invalidate();
     }
 
     private List<User> setUsersOnlineParameter(List<User> users) {
         for (User user : users) {
-            if (usersAndSessions.existsUserSession(user.getId())) {
+            if (this.users.existsUserSession(user.getId())) {
                 user.setIsOnline(true);
             }
         }

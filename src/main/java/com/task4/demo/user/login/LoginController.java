@@ -1,9 +1,8 @@
 package com.task4.demo.user.login;
 
-import com.task4.demo.user.PoolOfSessionsAndUsers;
-import com.task4.demo.user.User;
+import com.task4.demo.user.PoolOfUsers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 
@@ -22,14 +20,11 @@ import java.io.IOException;
 public class LoginController {
     private LoginService service;
 
-    private PoolOfSessionsAndUsers usersAndSessions;
-
     private RedirectStrategy redirectStrategy;
 
     @Autowired
-    public LoginController(PoolOfSessionsAndUsers usersAndSessions,
+    public LoginController(PoolOfUsers usersAndSessions,
                            LoginService service) {
-        this.usersAndSessions = usersAndSessions;
         this.service = service;
         this.redirectStrategy = new DefaultRedirectStrategy();
     }
@@ -51,12 +46,12 @@ public class LoginController {
 
     @PostMapping(path = "/login")
     public void login(@ModelAttribute UserLoginDetails user,
-                      final HttpSession session,
                       final HttpServletRequest request,
                       final HttpServletResponse response) throws IOException {
         try {
-            service.login(user, session);
-            setSessionInformation(request, response);
+            service.login(user, request);
+            System.out.println("Successfully logged in");
+            redirect(request, response);
         }
         catch (RuntimeException e) {
             redirectStrategy.sendRedirect(request, response, "/login");
@@ -64,8 +59,8 @@ public class LoginController {
         }
     }
 
-    private void setSessionInformation(final HttpServletRequest request,
-                                       final HttpServletResponse response) throws IOException {
+    private void redirect(final HttpServletRequest request,
+                          final HttpServletResponse response) throws IOException {
         response.setStatus(HttpServletResponse.SC_ACCEPTED);
         redirectStrategy.sendRedirect(request, response, "/users");
     }

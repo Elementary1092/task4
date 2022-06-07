@@ -3,6 +3,7 @@ package com.task4.demo.user.login;
 import com.task4.demo.common.Encoder;
 import com.task4.demo.common.PasswordEncoder;
 import com.task4.demo.exceptions.InvalidPasswordException;
+import com.task4.demo.exceptions.NoSuchUserException;
 import com.task4.demo.repositories.UserRepository;
 import com.task4.demo.user.User;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +22,10 @@ public class StandardLogin implements LoginStrategy {
     @Override
     public User login(UserRepository repository) throws RuntimeException {
         User userFromDb = repository.findByEmail(user.getUsername());
+
+        if (userFromDb.getPassword() == null) {
+            throw new NoSuchUserException(user.getUsername());
+        }
 
         if (!encoder.matches(user.getPassword(), userFromDb.getPassword())) {
             throw new InvalidPasswordException();

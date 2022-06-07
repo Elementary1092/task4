@@ -3,44 +3,9 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
     <body>
-        <div th:fragment="cancelButton">
-            <div class="form-group row">
-                <button type="button" class="btn btn-default" th:onclick="'window.location.href=\'/users\''">
-                    Cancel
-                </button>
-            </div>
-        </div>
-
-        <div th:fragment="submitButton">
-            <div class="form-group row">
-                <button type="submit" class="btn btn-default" formmethod="post" autofocus>
-                    Submit
-                </button>
-            </div>
-        </div>
-
         <div th:fragment="logout">
-            <button type="button" value="logout" th:onclick="'window.location.href=\'/logout\''">
-                Log out
-            </button>
-        </div>
-
-        <div th:fragment="block">
-            <button name="button" type="submit" value="block">
-                Block
-            </button>
-        </div>
-
-        <div th:fragment="unblock">
-            <button name="button" type="submit" value="unblock">
-                Unblock
-            </button>
-        </div>
-
-        <div th:fragment="delete">
-            <button name="button" type="submit" value="delete">
-                Delete
-            </button>
+            <button class="btn btn-primary"
+                    type="button" value="logout" th:onclick="'window.location.href=\'/users/logout\''">Logout</button>
         </div>
     </body>
 </html>
