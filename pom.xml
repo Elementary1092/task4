@@ -55,8 +55,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -90,6 +90,8 @@
                 <version>2.7.0</version>
             </plugin>
         </plugins>
+
+        <finalName>spring-boot-task4</finalName>
     </build>
 
 </project>
