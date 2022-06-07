@@ -9,14 +9,14 @@ import java.util.UUID;
 
 @Component
 public class PoolOfUsers {
-    private final Map<UUID, Boolean> usersAndContexts;
+    private final Map<UUID, HttpSession> usersAndContexts;
 
     public PoolOfUsers() {
         this.usersAndContexts = new HashMap<>();
     }
 
-    synchronized public void add(UUID id) {
-        usersAndContexts.put(id, true);
+    synchronized public void add(UUID id, HttpSession session) {
+        usersAndContexts.put(id, session);
     }
 
     public boolean existsUserSession(UUID id) {
@@ -24,11 +24,12 @@ public class PoolOfUsers {
     }
 
     synchronized public void expireUser(UUID id) {
-        usersAndContexts.remove(id);
-    }
+        try {
+            usersAndContexts.get(id).invalidate();
+            usersAndContexts.remove(id);
+        }
+        catch (Exception e) {
 
-    synchronized public void expireUser(UUID id, HttpSession session) {
-        session.invalidate();
-        usersAndContexts.remove(id);
+        }
     }
 }

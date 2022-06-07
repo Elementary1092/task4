@@ -34,7 +34,7 @@ public class LoginService {
         User userDetails = loginStrategy.setLoginEntity(user).login(repository);
         if (!userDetails.isBlocked()) {
             request.getSession().setAttribute("user_id", userDetails.getId());
-            users.add(userDetails.getId());
+            users.add(userDetails.getId(), request.getSession());
             return userDetails;
         } else {
             throw new RuntimeException("user is blocked");

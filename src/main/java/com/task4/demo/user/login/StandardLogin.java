@@ -8,6 +8,8 @@ import com.task4.demo.repositories.UserRepository;
 import com.task4.demo.user.User;
 import org.jetbrains.annotations.NotNull;
 
+import javax.servlet.http.HttpSession;
+
 public class StandardLogin implements LoginStrategy {
     private UserLoginDetails user;
 
